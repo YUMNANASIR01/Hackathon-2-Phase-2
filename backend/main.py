@@ -16,6 +16,9 @@ from security import verify_access_token, create_access_token, verify_password
 app = FastAPI(title="Todo App API", version="1.0.0")
 
 # Add CORS middleware
+import os
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -26,6 +29,7 @@ app.add_middleware(
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3001",
         "http://127.0.0.1:3002",
+        frontend_url,  # Production frontend URL from env
     ],
     allow_credentials=True,
     allow_methods=["*"],
