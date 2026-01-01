@@ -11,24 +11,24 @@ export default function EditTaskPage() {
   const params = useParams();
   const router = useRouter();
   const taskId = parseInt(params.id as string);
-  const { tasks, fetchTasks, updateTask, isLoading } = useTasks();
+  const { getTask, fetchTasks, updateTask, isLoading } = useTasks();
   const [task, setTask] = useState<any>(null);
   const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
     const loadTask = async () => {
-      // First try to get from existing tasks
-      let foundTask = tasks.find((t) => t.id === taskId);
+      // First try to get from existing tasks using the getTask method
+      let foundTask = getTask(taskId);
 
       if (!foundTask) {
         // If not found, fetch all tasks
         await fetchTasks();
-        foundTask = tasks.find((t) => t.id === taskId);
+        // After fetching, try again
+        foundTask = getTask(taskId);
       }
 
       if (!foundTask) {
-        // If still not found, we might need to fetch it directly
-        // For now, we'll just show the not found message
+        // If still not found, show not found message
         setIsPageLoading(false);
         return;
       }
@@ -38,7 +38,7 @@ export default function EditTaskPage() {
     };
 
     loadTask();
-  }, [taskId, tasks, fetchTasks]);
+  }, [taskId, getTask, fetchTasks]);
 
   const handleSubmit = async (data: UpdateTaskInput) => {
     await updateTask(taskId, data);
