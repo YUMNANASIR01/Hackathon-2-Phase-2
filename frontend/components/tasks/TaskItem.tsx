@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { formatRelativeTime } from '@/lib/utils';
+import { formatDate, formatTime } from '@/lib/utils';
 import { Card, Button, ConfirmDialog } from '../shared';
 import type { Task } from '@/lib/types';
 
@@ -22,6 +22,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isTogglingComplete, setIsTogglingComplete] = useState(false);
+
+  // Format only the date when the task was added (without time)
+  const taskDate = new Date(task.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 
   const handleToggle = async () => {
     setIsTogglingComplete(true);
@@ -101,7 +108,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
             )}
 
             <p className="text-xs text-gray-500 mt-2">
-              {formatRelativeTime(task.createdAt)}
+              {taskDate}
             </p>
           </div>
 
