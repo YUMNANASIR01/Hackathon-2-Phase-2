@@ -8,7 +8,7 @@ import { signInSchema, validateForm } from '@/lib/validation';
 import type { SignInForm } from '@/lib/validation';
 
 export const LoginForm: React.FC = () => {
-  const { signIn, isLoading } = useAuth();
+  const { signIn, isLoading, error } = useAuth();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
@@ -65,6 +65,13 @@ export const LoginForm: React.FC = () => {
         <p className="text-gray-400 mb-8">
           Sign in to your account to continue
         </p>
+
+        {/* Display global error message */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-900/30 border border-red-700 rounded-md text-red-300 text-sm">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
